@@ -1,0 +1,24 @@
+# Virtual Environments
+backend/venv/
+backend/ENV/
+backend/site-packages/
+
+# Secrets
+backend/.env
+frontend/.env
+frontend/.env.local
+
+# Node modules
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Output and temp files
+backend/output/
+backend/workspaces/
+backend/temp/
+backend/__pycache__/
+*.pyc
+
+# Supabase
+supabase/.temp/

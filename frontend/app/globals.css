@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap');
+
+:root {
+  /* Aurora Ambient Palette */
+  --bg-main: #0a0b10;
+  --bg-card: rgba(22, 22, 26, 0.85);
+  --bg-sec: #010101;
+
+  /* Ambient Aurora Coordinates */
+  --aurora-purple: hsla(258, 84%, 51%, 0.2);
+  --aurora-blue: hsla(220, 100%, 50%, 0.2);
+  --aurora-indigo: hsla(260, 100%, 50%, 0.15);
+  --aurora-teal: hsla(191, 100%, 50%, 0.2);
+  --aurora-pink: hsla(300, 100%, 50%, 0.15);
+
+  /* Neon Accents from Reference Image */
+  --accent-pri: #00f5d4; /* Glowing Teal */
+  --accent-pri-glow: hsla(172, 100%, 48%, 0.3);
+  --accent-sec: #a29bfe; /* Glowing Purple */
+  --accent-sec-glow: hsla(241, 100%, 80%, 0.3);
+
+  --accent-red: #ff3b6b;
+  --accent-warn: #fb2ea3;
+
+  /* Text & Borders */
+  --text-pri: #ffffff;
+  --text-sec: #94a3b8;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: var(--accent-pri);
+
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background:
+    radial-gradient(circle at 15% 15%, var(--aurora-purple), transparent 50%),
+    radial-gradient(circle at 85% 10%, var(--aurora-blue), transparent 60%),
+    radial-gradient(circle at 95% 25%, var(--aurora-indigo), transparent 40%),
+    radial-gradient(circle at 50% 100%, var(--aurora-teal), transparent 50%),
+    radial-gradient(circle at 0% 100%, var(--aurora-pink), transparent 40%),
+    var(--bg-main);
+  background-attachment: fixed;
+  color: var(--text-pri);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+/* World-Class Typography */
+.Orbitron {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1.5px;
+}
+
+.Mono {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--accent-pri);
+  color: #000;
+  font-family: 'Orbitron';
+  font-weight: 800;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  transition: var(--transition);
+  box-shadow: 0 0 15px var(--accent-pri-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 25px var(--accent-pri);
+}
+
+.btn-outline-red {
+  background: transparent;
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  font-family: 'Orbitron';
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-outline-red:hover {
+  background: var(--accent-red);
+  color: #fff;
+}
+
+.btn-outline-cyan {
+  background: hsla(180, 100%, 47%, 0.05);
+  border: 1px solid var(--accent-pri);
+  color: var(--accent-pri);
+  font-family: 'Orbitron';
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.btn-outline-cyan:hover {
+  background: var(--accent-pri);
+  color: #000;
+}
+
+.btn-outline-white {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #334155;
+  color: #fff;
+  font-family: 'Orbitron';
+  cursor: pointer;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.btn-outline-white:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Form Styling */
+.input-field {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  outline: none;
+  font-family: 'Share Tech Mono';
+  transition: var(--transition);
+}
+
+.input-field:focus {
+  border-color: var(--accent-pri);
+  box-shadow: 0 0 10px var(--accent-pri-glow);
+}
+
+/* Navigation & Tabs */
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-sec);
+  font-family: 'Orbitron';
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 1px;
+  transition: var(--transition);
+}
+
+.tab-btn.active {
+  color: #fff;
+  background: hsla(0, 0%, 100%, 0.05);
+  border-radius: 6px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+/* Progress Visualization */
+.progress-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.node-hex {
+  width: 32px;
+  height: 36px;
+  background: #0f172a;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: 'Orbitron';
+  color: #475569;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.node-hex.active {
+  background: var(--accent-pri);
+  color: #000;
+  box-shadow: 0 0 20px var(--accent-pri);
+}
+
+.node-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-sec);
+  margin-top: 12px;
+  font-family: 'Orbitron';
+}
+
+.progress-line {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #1e293b;
+  z-index: 1;
+}
+
+/* Settings Components */
+.settings-section-title {
+  font-family: 'Orbitron';
+  font-size: 11px;
+  color: var(--accent-pri);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.settings-label {
+  width: 260px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Orbitron';
+  color: var(--text-sec);
+}
+
+.chip-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.chip {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 11px;
+  font-family: 'Orbitron';
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.chip.active {
+  background: var(--accent-sec);
+  color: #fff;
+  border-color: var(--accent-sec);
+  box-shadow: 0 0 15px var(--accent-sec-glow);
+}
+
+.chip.active-cyan {
+  background: var(--accent-pri);
+  color: #000;
+  border-color: var(--accent-pri);
+  box-shadow: 0 0 15px var(--accent-pri-glow);
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
