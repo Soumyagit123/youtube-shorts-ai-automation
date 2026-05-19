@@ -226,7 +226,7 @@ async def build_video(
                 "-r", str(VIDEO_FPS),
                 str(scene_path)
             ]
-            _run_ffmpeg(cmd, f"ken_burns_{idx}")
+            await _run_ffmpeg(cmd, f"ken_burns_{idx}")
             scene_clips.append(scene_path)
 
         # ── STEP 2: Concatenate scenes ────────────────────────────────────
@@ -246,7 +246,7 @@ async def build_video(
             "-c", "copy",
             str(concat_path)
         ]
-        _run_ffmpeg(cmd, "concatenate")
+        await _run_ffmpeg(cmd, "concatenate")
 
         # ── STEP 3: Mix audio ─────────────────────────────────────────────
         no_subs_path = temp_dir / "no_subs.mp4"
@@ -259,7 +259,7 @@ async def build_video(
             "-shortest",
             str(no_subs_path),
         ]
-        _run_ffmpeg(cmd, "mix_audio")
+        await _run_ffmpeg(cmd, "mix_audio")
         log.info("  Step 4: Audio mixed")
 
         # ── STEP 5: Generate ASS subtitles ────────────────────────────────
@@ -279,7 +279,7 @@ async def build_video(
             "-c:a", "copy",
             str(out_path),
         ]
-        _run_ffmpeg(cmd, "burn_subtitles")
+        await _run_ffmpeg(cmd, "burn_subtitles")
         log.info("  Step 6: Subtitles burned")
 
         log.info(f"Video rendered → {out_path}")

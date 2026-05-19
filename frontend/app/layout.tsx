@@ -3,7 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
-  title: "Ghost Creator AI v2 — SaaS Hub",
+  title: "YT-Short Creator AI v2 — SaaS Hub",
   description: "Automated YouTube Shorts Pipeline",
 };
 

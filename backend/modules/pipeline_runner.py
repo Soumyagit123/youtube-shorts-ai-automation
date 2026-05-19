@@ -56,6 +56,10 @@ class PipelineRunner:
             self.loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self.loop)
 
+    @property
+    def queue(self):
+        return self.log_queue
+
     def _log(self, msg: str, progress: int | None = None):
         full_msg = f"[INFO] {msg}"
         log.info(full_msg)

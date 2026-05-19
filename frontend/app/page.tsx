@@ -209,7 +209,7 @@ export default function AuroraDashboard() {
             <div className="main_wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
                 <div className="glass" style={{ width: '420px', padding: '40px', borderRadius: '16px', border: '1px solid var(--border)', textAlign: 'center' }}>
                     <div style={{ fontSize: '44px', marginBottom: '16px' }}>👻</div>
-                    <h1 className="Orbitron" style={{ fontSize: '18px', marginBottom: '6px' }}>GHOST <span style={{ color: 'var(--accent-pri)' }}>CREATOR AI</span></h1>
+                    <h1 className="Orbitron" style={{ fontSize: '18px', marginBottom: '6px' }}>YT-SHORT <span style={{ color: 'var(--accent-pri)' }}>CREATOR AI</span></h1>
                     <p className="Mono" style={{ fontSize: '10px', color: 'var(--text-sec)', marginBottom: '28px' }}>AUTHORIZATION LAYER v2.5</p>
 
                     {/* Mode Toggle */}
@@ -253,7 +253,7 @@ export default function AuroraDashboard() {
                         <span style={{ fontSize: '14px' }}>👻</span>
                     </div>
                     <div>
-                        <h1 className="Orbitron" style={{ fontSize: '13px', letterSpacing: '2px', fontWeight: 800, margin: 0 }}>GHOST CREATOR <span style={{ color: 'var(--accent-pri)' }}>AI</span></h1>
+                        <h1 className="Orbitron" style={{ fontSize: '13px', letterSpacing: '2px', fontWeight: 800, margin: 0 }}>YT-SHORT CREATOR <span style={{ color: 'var(--accent-pri)' }}>AI</span></h1>
                         <p className="Mono" style={{ fontSize: '9px', color: 'var(--accent-pri)', opacity: 0.8, letterSpacing: '1px' }}>SYNAPTIC CORE v2.5_PRO | {user.email}</p>
                     </div>
                 </div>

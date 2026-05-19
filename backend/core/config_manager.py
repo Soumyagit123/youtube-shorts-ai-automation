@@ -141,7 +141,7 @@ class ConfigManager:
             "updated_at": "now()"
         }
         try:
-            self._supabase.table("user_settings").upsert(db_data).execute()
+            self._supabase.table("user_settings").upsert(db_data, on_conflict="user_id").execute()
             return True
         except Exception as e:
             print(f"Error saving user config: {e}")
