@@ -13,86 +13,61 @@ Below is the end-to-end flow of the automated pipeline from the initial dashboar
 ```mermaid
 graph TD
     %% Styling Definitions
-    classDef frontend fill:#1e1e2e,stroke:#cba6f7,stroke-width:2px,color:#cdd6f4;
-    classDef backend fill:#11111b,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4;
-    classDef database fill:#181825,stroke:#a6e3a1,stroke-width:2px,color:#cdd6f4;
-    classDef ai fill:#313244,stroke:#f38ba8,stroke-width:2px,color:#cdd6f4;
-    classDef render fill:#1e1e2e,stroke:#fab387,stroke-width:2px,color:#cdd6f4;
-    classDef publisher fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#cdd6f4;
+    classDef nodeStyle fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#1e1b4b;
+    classDef dbStyle fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b;
+    classDef outStyle fill:#fef2f2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d;
+    classDef runnerStyle fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f;
 
-    %% Subgraphs representing different layers
-    subgraph FE ["🌐 Client Dashboard (React / Next.js)"]
-        Dash["Next.js Interface Dashboard"]:::frontend
-        WS["WebSocket Live Terminal Panel"]:::frontend
-    end
-
-    subgraph BE ["⚡ Application Orchestration (FastAPI)"]
-        API["FastAPI App Routes / Router"]:::backend
-        Runner["PipelineRunner Background Core"]:::backend
-        WSM["WebSocket Logs Dispatcher"]:::backend
-    end
-
-    subgraph DB ["🔐 Multi-Tenant Database & Storage (Supabase)"]
-        Auth["Supabase Authentication Layer"]:::database
-        ConfigDB["user_settings Config Table"]:::database
-        JobsDB["video_jobs History Table"]:::database
-        Storage["Supabase Video Storage Bucket"]:::database
-    end
-
-    subgraph AI_Layer ["🤖 Generative AI Layer"]
-        Res["Researcher Module (pytrends / RSS Scraper)"]:::ai
-        Scr["Scripter Module (Gemini JSON Scriptwriter)"]:::ai
-        Voice["Voicer Module (TTS: ElevenLabs / Edge-TTS / Kokoro)"]:::ai
-        Vision["Image Gen Module (Fal.ai / Replicate / Pollinations)"]:::ai
-    end
-
-    subgraph COMP ["🎬 Video Compositing (FFmpeg Direct)"]
-        KB["Ken Burns Zoom Filter (2D Camera Movement)"]:::render
-        Sub["ASS Subtitle Timer (Word-by-word timers)"]:::render
-        Mux["FFmpeg Audio-Video-Text Muxer Engine"]:::render
-    end
-
-    subgraph PUB ["🚀 Autonomous YouTube Publisher (Playwright)"]
-        Profiles["Chrome User Profiles Folder (Local Cache)"]:::publisher
-        Browser["Playwright Chromium Session (Cookie Bypass)"]:::publisher
-        Studio["YouTube Studio Upload Automator UI"]:::publisher
-    end
-
-    %% Execution Sequence Flow
-    Dash -->|1. Trigger Video Sequence| API
-    API -->|2. Spawns Async Task Thread| Runner
-    Runner -->|3. Query Isolated User Profile| ConfigDB
+    %% Frontend and Backend
+    UI[Next.js Frontend Dashboard]:::nodeStyle
+    API[FastAPI Backend Server]:::nodeStyle
     
-    %% AI Generation Flow
-    Runner -->|4. Find Trending Topic| Res
-    Res -->|5. Selected Headline Topic| Scr
-    Scr -->|6. JSON Narration + 6 Image Prompts| Runner
-    Runner -->|7. Generate Speech Audio| Voice
-    Runner -->|8. Generate 6 vertical PNGs| Vision
+    UI <-->|HTTP API / WebSockets| API
     
-    %% FFmpeg Rendering Inputs
-    Voice -->|voiceover.mp3| KB
-    Vision -->|vertical PNGs| KB
-    Scr -->|raw voiceover_text| Sub
+    %% Auth and DB
+    DB[(Supabase PostgreSQL)]:::dbStyle
+    ST[Supabase Storage]:::dbStyle
     
-    %% FFmpeg Rendering Steps
-    KB -->|Rendered Zoom MP4 Streams| Mux
-    Sub -->|Rendered ASS Timed File| Mux
+    API <-->|Auth & SQL Sync| DB
+    API -->|Upload MP4| ST
     
-    %% Output Upload
-    Mux -->|9. Compiled output video| Runner
-    Runner -->|10. Upload short.mp4| Storage
-    Runner -->|11. Sync Job Status to completed| JobsDB
-    Runner -->|12. Dispatch Publishing Request| Browser
+    %% Pipeline Runner
+    Runner[PipelineRunner]:::runnerStyle
+    API -->|Async Task| Runner
     
-    %% Playwright Publishing Flow
-    ConfigDB -->|Inject target profile details| Browser
-    Profiles -->|Mount cookies and bypass auth| Browser
-    Browser -->|13. Upload & Publish Video| Studio
+    %% Generative Engines Subgraph
+    subgraph AI_Layer ["AI Generation Layer"]
+        Res[Researcher Module]:::nodeStyle
+        Scr[Scripter Module]:::nodeStyle
+        Voice[Voicer Module]:::nodeStyle
+        Img[Image Gen Module]:::nodeStyle
+        
+        Runner -->|Scrape Trends| Res
+        Runner -->|Gemini 2.5 Flash| Scr
+        Runner -->|TTS Engines| Voice
+        Runner -->|Image APIs| Img
+    end
     
-    %% Real-time Logging Feedback Loop
-    Runner -->|Redirects terminal stdout| WSM
-    WSM -->|Streams live logs websocket| WS
+    %% Video and Upload
+    VB[Video Builder]:::nodeStyle
+    Upload[Uploader Module]:::nodeStyle
+    
+    Runner -->|FFmpeg Processing| VB
+    Runner -->|Playwright Browser| Upload
+    VB --> Upload
+    
+    %% External Services
+    GoogleTrends[Google Trends]:::outStyle
+    RSS[Tech RSS Feeds]:::outStyle
+    TTS_APIs[Audio Generation]:::outStyle
+    Image_APIs[Stable Diffusion / FLUX]:::outStyle
+    YT[YouTube Studio]:::outStyle
+    
+    Res -->|pytrends| GoogleTrends
+    Res -->|feedparser| RSS
+    Voice -->|Chatterbox / Edge-TTS / ElevenLabs| TTS_APIs
+    Img -->|Fal.ai / Replicate / Pollinations| Image_APIs
+    Upload -->|Automated Browser| YT
 ```
 
 ---
