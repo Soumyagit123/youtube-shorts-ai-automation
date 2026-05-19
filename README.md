@@ -11,55 +11,88 @@ An enterprise-grade, multi-tenant SaaS platform built for **100% automated YouTu
 Below is the end-to-end flow of the automated pipeline from the initial dashboard trigger to the final YouTube upload.
 
 ```mermaid
-sequenceDiagram
-    autonumber
-    actor Creator as Content Creator
-    participant Dashboard as Next.js Dashboard
-    participant API as FastAPI Backend
-    participant DB as Supabase DB & Storage
-    participant AI as Generative AI Layer
-    participant FFmpeg as FFmpeg Video Builder
-    participant PW as Playwright Browser
+graph TD
+    %% Styling Definitions
+    classDef frontend fill:#1e1e2e,stroke:#cba6f7,stroke-width:2px,color:#cdd6f4;
+    classDef backend fill:#11111b,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4;
+    classDef database fill:#181825,stroke:#a6e3a1,stroke-width:2px,color:#cdd6f4;
+    classDef ai fill:#313244,stroke:#f38ba8,stroke-width:2px,color:#cdd6f4;
+    classDef render fill:#1e1e2e,stroke:#fab387,stroke-width:2px,color:#cdd6f4;
+    classDef publisher fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#cdd6f4;
 
-    Creator->>Dashboard: Trigger Pipeline Run
-    Dashboard->>API: POST /api/pipeline/run
-    activate API
-    API-->>Dashboard: Return Job ID (200 OK)
+    %% Subgraphs representing different layers
+    subgraph FE ["🌐 Client Dashboard (React / Next.js)"]
+        Dash["Next.js Interface Dashboard"]:::frontend
+        WS["WebSocket Live Terminal Panel"]:::frontend
+    end
+
+    subgraph BE ["⚡ Application Orchestration (FastAPI)"]
+        API["FastAPI App Routes / Router"]:::backend
+        Runner["PipelineRunner Background Core"]:::backend
+        WSM["WebSocket Logs Dispatcher"]:::backend
+    end
+
+    subgraph DB ["🔐 Multi-Tenant Database & Storage (Supabase)"]
+        Auth["Supabase Authentication Layer"]:::database
+        ConfigDB["user_settings Config Table"]:::database
+        JobsDB["video_jobs History Table"]:::database
+        Storage["Supabase Video Storage Bucket"]:::database
+    end
+
+    subgraph AI_Layer ["🤖 Generative AI Layer"]
+        Res["Researcher Module (pytrends / RSS Scraper)"]:::ai
+        Scr["Scripter Module (Gemini JSON Scriptwriter)"]:::ai
+        Voice["Voicer Module (TTS: ElevenLabs / Edge-TTS / Kokoro)"]:::ai
+        Vision["Image Gen Module (Fal.ai / Replicate / Pollinations)"]:::ai
+    end
+
+    subgraph COMP ["🎬 Video Compositing (FFmpeg Direct)"]
+        KB["Ken Burns Zoom Filter (2D Camera Movement)"]:::render
+        Sub["ASS Subtitle Timer (Word-by-word timers)"]:::render
+        Mux["FFmpeg Audio-Video-Text Muxer Engine"]:::render
+    end
+
+    subgraph PUB ["🚀 Autonomous YouTube Publisher (Playwright)"]
+        Profiles["Chrome User Profiles Folder (Local Cache)"]:::publisher
+        Browser["Playwright Chromium Session (Cookie Bypass)"]:::publisher
+        Studio["YouTube Studio Upload Automator UI"]:::publisher
+    end
+
+    %% Execution Sequence Flow
+    Dash -->|1. Trigger Video Sequence| API
+    API -->|2. Spawns Async Task Thread| Runner
+    Runner -->|3. Query Isolated User Profile| ConfigDB
     
-    rect rgb(30, 30, 46)
-        note right of API: Background Task Execution
-        API->>DB: Insert Run Record (Status: running)
-        API->>AI: Fetch Trending Tech/AI Topics (Google Trends / RSS)
-        AI-->>API: Return Topic
-        API->>AI: Generate Script & Image Prompts (Gemini 2.5 Flash)
-        AI-->>API: Return JSON (Script + 6 Image Prompts)
-        API->>AI: Synthesize Audio Voiceover (TTS Backend)
-        AI-->>API: Return voiceover.mp3
-        API->>AI: Generate 6 vertical images (Fal.ai / Replicate)
-        AI-->>API: Return 6 vertical PNGs
-    end
-
-    rect rgb(46, 30, 46)
-        note right of API: Video Assembly
-        API->>FFmpeg: Apply Ken Burns Zoom Effect
-        API->>FFmpeg: Map timing and generate ASS Subtitles
-        API->>FFmpeg: Burn subtitles & merge Audio + Video
-        FFmpeg-->>API: Return final_short.mp4
-    end
-
-    rect rgb(30, 46, 30)
-        note right of API: Storage & Publishing
-        API->>DB: Upload final_short.mp4 to Supabase Storage
-        API->>DB: Update Video Job Status (Status: completed + video_url)
-        API->>PW: Launch Isolated Chrome Session (Playwright)
-        PW->>PW: Navigate to YouTube Studio
-        PW->>PW: Fill Title, Desc, Tags & Publish Video
-        PW-->>API: Upload Complete
-    end
-
-    API->>Dashboard: Broadcast Log: "Process complete! Video ready."
-    deactivate API
-    Dashboard-->>Creator: Download Link & Live Dashboard View
+    %% AI Generation Flow
+    Runner -->|4. Find Trending Topic| Res
+    Res -->|5. Selected Headline Topic| Scr
+    Scr -->|6. JSON Narration + 6 Image Prompts| Runner
+    Runner -->|7. Generate Speech Audio| Voice
+    Runner -->|8. Generate 6 vertical PNGs| Vision
+    
+    %% FFmpeg Rendering Inputs
+    Voice -->|voiceover.mp3| KB
+    Vision -->|vertical PNGs| KB
+    Scr -->|raw voiceover_text| Sub
+    
+    %% FFmpeg Rendering Steps
+    KB -->|Rendered Zoom MP4 Streams| Mux
+    Sub -->|Rendered ASS Timed File| Mux
+    
+    %% Output Upload
+    Mux -->|9. Compiled output video| Runner
+    Runner -->|10. Upload short.mp4| Storage
+    Runner -->|11. Sync Job Status to completed| JobsDB
+    Runner -->|12. Dispatch Publishing Request| Browser
+    
+    %% Playwright Publishing Flow
+    ConfigDB -->|Inject target profile details| Browser
+    Profiles -->|Mount cookies and bypass auth| Browser
+    Browser -->|13. Upload & Publish Video| Studio
+    
+    %% Real-time Logging Feedback Loop
+    Runner -->|Redirects terminal stdout| WSM
+    WSM -->|Streams live logs websocket| WS
 ```
 
 ---
