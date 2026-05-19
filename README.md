@@ -223,3 +223,23 @@ npm run dev
 *   **Playwright Session Recovery**: Utilizing pre-authenticated browser directories allows Playwright to preserve login cookies and avoid Google's automated login blocks, eliminating the need for daily SMS/OTP requests.
 *   **Log Interception Handler**: Standard print calls are routed to a custom python log handler that feeds an in-memory queue. This queue is broadcasted live to the dashboard over WebSockets, streaming real-time status details to the client's screen.
 *   **10x Compiling Speeds**: Migrated from python editing libraries (like MoviePy) to direct FFmpeg process streams, reducing a 60-second video compile time from 5 minutes down to just 30 seconds.
+
+---
+
+## 📚 Libraries & Why We Chose Them
+
+Use this table to explain exactly **why** you chose each library:
+
+| Library / Tool | Functionality in Project | Why We Used It (Benefits) |
+| :--- | :--- | :--- |
+| **FastAPI** | REST API & WebSockets Router | Fast, modern web framework with native async support and automatic OpenAPI documentation. |
+| **Playwright** | YouTube Studio Automation | Emulates real Chromium headers, supports launching persistent user profiles to bypass security checks, and is faster/more stable than Selenium. |
+| **google-genai** | Gemini LLM Script Generation | Connects to Gemini 2.5 Flash to generate multilingual narration scripts and matching visual prompts in structured JSON. |
+| **Supabase (python)** | SaaS Authentication & SQL Database | Multi-tenant user login out-of-the-box and PostgreSQL table synchronization for configuration persistence and job history. |
+| **pytrends** | Google Trends Scraper | Autonomously checks Google Trends real-time queries for high-virality tech/AI topics. |
+| **feedparser** | RSS Feed Parser | Scrapes tech news headlines (Wired, Verge, etc.) as a fallback when Google Trends is rate-limited. |
+| **pydub** | Audio Duration Checking | Reads generated MP3 wave headers to find precise audio duration down to milliseconds, allowing exact image-duration alignment. |
+| **edge-tts** | High-Quality Text-to-Speech | Generates natural-sounding speech for free without API keys, supporting multiple languages. |
+| **fal-client / replicate** | Image Generation APIs | Dispatches image generation tasks to high-performance cloud GPUs (SDXL, FLUX) for cinematic 9:16 visuals. |
+| **FFmpeg** | Video/Audio Rendering Engine | Directly executes command-line filters (conversions, scales, Ken Burns pans, and subtitle burning) with maximum speed and zero memory leaks. |
+
